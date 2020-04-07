@@ -5,7 +5,8 @@ const authService = require('../services/auth.service');
 
 
 router.get('/me', async(req, res) => {
-	res.send(await authService.getUser(req.cookies.username));
+	// res.send(await authService.getUser(req.session.username));
+	res.send(await authService.getUser(''));
 });
 
 

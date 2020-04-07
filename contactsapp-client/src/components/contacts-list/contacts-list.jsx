@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './contacts-list.scss';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useStateValue } from '../../context/state';
+import { getContacts } from '../../api/contacts.api';
 
 
 export const ContactsList = () => {
 	const [contacts, setContacts] = useState([]);
 
 	useEffect(() => {
-		axios.get('http://localhost:8081/contacts')
-			.then((res) => setContacts(res.data));
+		getContacts().then((res) => setContacts(res));
 	}, []);
 
 	return (

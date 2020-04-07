@@ -1,53 +1,57 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './App.scss';
 import { ContactsList } from './components/contacts-list/contacts-list';
 import { ContactConnections } from './components/contact-connections/contact-connections';
-import { Switch, Route } from 'react-router-dom';
-import axios from 'axios';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { Login } from './components/login';
-import { StateContext } from './context/state';
+import { useStateValue } from './context/state';
+import { setChildToParentAction, setUserAction } from './context/actions';
+import { getUser } from './api/core.api';
+
+
+const PrivateRoutes = () => {
+	return (
+		<div>
+			<ContactsList/>
+			<Switch>
+				<Route exact path={'/contact/:id'} render={() => <ContactConnections/>}/>
+			</Switch>
+		</div>
+	)
+};
+
+
+const PublicRoutes = () => {
+	return (
+		<Switch>
+			<Route exact path={'/'} render={() => <Redirect to={'/login'}/>}/>
+			<Route exact path={'/login'} render={() => <Login/>}/>
+		</Switch>
+	)
+};
+
 
 export const App = () => {
-
-	const [{user, isLoading, childToParent}, dispatch] = useContext(StateContext);
-
+	const [{user, isLoading, childToParent}, dispatch] = useStateValue();
 	console.log(childToParent);
 
 	useEffect(() => {
-			axios.get('http://localhost:8081/me').then((res) => {
-				dispatch({
-					type: 'USER_RESPONSE',
-					payload: res.data
-				});
-			});
-	}, []);
-
+		getUser().then((res) => dispatch(setUserAction(res)));
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (childToParent === 'Parent') {
 			console.log('Parent is about to change state');
-			dispatch({
-				type: 'USER_RESPONSE',
-				payload: 'Hey Child Again'
-			})
+			dispatch(setChildToParentAction('Hey Child Again'));
 		}
-	}, [childToParent]);
+	}, [childToParent, dispatch]);
 
 	return (
 		<>
-				{
-					isLoading ? <div>LOADING PAGE</div> :
-						!!user ?
-							<div>
-								<ContactsList/>
-								<Switch>
-									<Route exact path={'/contact/:id'} render={() => <ContactConnections/>}/>
-								</Switch>
-							</div>
-							:
-							<Login/>
-				}
+			{
+				isLoading ? <div>LOADING PAGE</div> :
+					!!user ? <PrivateRoutes/> : <PublicRoutes/>
+			}
 		</>
 	)
 };
-ºº	º111ºº

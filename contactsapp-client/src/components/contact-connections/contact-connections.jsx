@@ -1,17 +1,15 @@
-import React, { useContext, useEffect } from 'react';
-import { StateContext } from '../../context/state';
+import React, { useEffect } from 'react';
+import { useStateValue } from '../../context/state';
+import { setChildToParentAction } from '../../context/actions';
 
 
 export const ContactConnections = () => {
 
-	const [{childToParent}, dispatch] = useContext(StateContext);
+	const [{childToParent}, dispatch] = useStateValue();
 
 
 	const handleClick = () => {
-		dispatch({
-			type: 'MODIFY_PARENT',
-			payload: 'Parent'
-		});
+		dispatch(setChildToParentAction('Parent'));
 	};
 
 	useEffect(() => {

@@ -3,7 +3,8 @@ const authRepository = require('../repositories/auth.repository');
 
 const getUser = (username) => {
 	const user = authRepository.userFindByUsername(username);
-	return !!user ? user : null;
+	return {username: 'aasdfadf'};
+	// return !!user ? user : null;
 };
 
 const login = (username, password) => {

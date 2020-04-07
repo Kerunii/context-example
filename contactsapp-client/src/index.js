@@ -4,7 +4,8 @@ import './index.scss';
 import { App } from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
-import { initialState, reducer, StateProvider } from './context/state';
+import { StateProvider } from './context/state';
+import { initialState, reducer } from './context/reducer';
 
 
 ReactDOM.render(
